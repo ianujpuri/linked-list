@@ -9,7 +9,7 @@ public class MainClient {
 		System.out.println(" size after A: " + list.size());
 		list.addAtEnd("C");
 		System.out.println(" size after C: " + list.size());
-		list.addAtIndex("B", 2);
+		list.addAtIndex("B", 1);
 		System.out.println(" size after B: " + list.size());
 		
 		list.printElements(); // A B C

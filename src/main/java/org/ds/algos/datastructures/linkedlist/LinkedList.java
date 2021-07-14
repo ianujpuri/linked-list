@@ -63,8 +63,7 @@ public class LinkedList<E> implements LinkInterface<E> {
 			System.out.println(" List is empty, insert at beginning.");
 			addAtBeginning(data);
 			return;
-		} else if (index > size) {
-			System.out.println(" Index is greater than current size of list, insert at end.");
+		} else if (index >= this.size) {			
 			addAtEnd(data);
 			return;
 		}
