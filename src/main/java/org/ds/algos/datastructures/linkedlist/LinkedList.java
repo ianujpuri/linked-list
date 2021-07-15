@@ -59,7 +59,7 @@ public class LinkedList<E> implements LinkInterface<E> {
 
 	public void addAtIndex(E data, int index) {
 
-		if(this.head == null) {
+		if(this.head == null || index == 0) {
 			System.out.println(" List is empty, insert at beginning.");
 			addAtBeginning(data);
 			return;
