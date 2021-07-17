@@ -73,7 +73,7 @@ public class LinkedList<E> implements LinkInterface<E> {
 		}
 
 		Node<E> pivot = this.head;
-		for(int i = 0; i < index; i++) {
+		for(int i = 1; i < index; i++) {
 			pivot = pivot.getNext();
 		}
 
