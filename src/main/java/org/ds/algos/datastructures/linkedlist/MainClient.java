@@ -23,5 +23,14 @@ public class MainClient {
 //		
 //		list.removeAtIndex(0);
 //		list.printElements();
+		
+		list.removeData("A");
+		list.printElements();
+		
+		list.removeData("C");
+		list.printElements();
+		
+		list.removeData("B");
+		list.printElements();
 	}
 }

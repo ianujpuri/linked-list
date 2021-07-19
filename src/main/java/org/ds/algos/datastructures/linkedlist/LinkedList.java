@@ -9,25 +9,29 @@ public class LinkedList<E> implements LinkInterface<E> {
 	private int size;
 
 	public void removeData(E key) {		
-		if(this.size == 0) {
-			System.out.println("List is empty");
-			return;
-		}
+		if(isEmpty()) {	return; }
 
 		if(this.head.getData().equals(key)) {
-			Node<E> node = this.head;
-			this.head = this.head.getNext();
-			node = null;
+			removeAtBeginning();
+			return;
 		} else {
 
-			Node<E> start = this.head;
-			while(start != null) {
-				if(start.getData().equals(key)) {
-
+			Node<E> delNode = this.head.getNext();
+			Node<E> prev = this.head;
+			while(delNode != null) {
+				if(delNode.getData().equals(key)) {					
 					break;
 				}
+				prev = delNode;
+				delNode = delNode.getNext();
 			}
-		}
+			
+			prev.setNext(delNode.getNext());
+			delNode.setNext(null);
+			delNode.setData(null);
+		}				
+		
+		this.size -= 1;
 	}
 
 	public void addAtBeginning(E data) {
