@@ -1,5 +1,6 @@
 package org.ds.algos.datastructures.linkedlist;
 
+import org.ds.algos.datasructures.node.LinkInterface;
 import org.ds.algos.datasructures.node.Node;
 
 public class LinkedList<E> implements LinkInterface<E> {
