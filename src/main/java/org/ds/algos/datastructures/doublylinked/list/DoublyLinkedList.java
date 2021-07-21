@@ -49,7 +49,7 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 		} 
 
 		DoublyNode<T> newNode = new DoublyNode<T>(data);
-		
+
 		if((size - index) >= index) {
 			DoublyNode<T> fwd = this.head;
 			for(int pivot = 1; pivot < index; pivot++) {							
@@ -59,36 +59,39 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 			newNode.setPrev(fwd);
 			fwd.getNext().setPrev(newNode);
 			newNode.setNext(fwd.getNext());
-			
+
 			fwd.setNext(newNode);
 		} else {
 			DoublyNode<T> bwd = this.tail;		
 			for(int pivot = this.size-1; pivot > index; pivot--) {
 				bwd = bwd.getPrev();
 			}
-			
+
 			newNode.setNext(bwd);
 			bwd.getPrev().setNext(newNode);
 			newNode.setPrev(bwd.getPrev());
-			
+
 			bwd.setPrev(newNode);
-			
+
 		}
-		
+
 		this.size += 1;
-		
+
 	}
 
 	public void removeAtBeginning() {
 
 		if(isEmpty()) { return; }
-		
+
 		DoublyNode<T> delNode = this.head;
-		
+
 		this.head = delNode.getNext();
 		this.head.setPrev(null);
-		
+
+		//help GC
 		delNode.setNext(null);
+		delNode.setPrev(null);
+		delNode.setData(null);
 
 		this.size -= 1;
 	}
@@ -96,34 +99,37 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 	public void removeAtEnd() {
 
 		if(isEmpty()) { return; }
-		
+
 		DoublyNode<T> delNode = this.tail;
-		
+
 		this.tail = delNode.getPrev();
 		this.tail.setNext(null);
 
+		//help GC
 		delNode.setPrev(null);
-		
+		delNode.setNext(null);
+		delNode.setData(null);
+
 		this.size -= 1;
 	}
 
 	public void removeAtIndex(int index) {
-		
+
 		if(isEmpty()) { return; } 
-		
+
 		if(index == 0) {
 			removeAtBeginning();
 			return;
 		} else if( index >= this.size) {
 			removeAtEnd();
 		} else {
-			
+
 			if((this.size - index) >= index) {
 				DoublyNode<T> fwd = this.head;
 				for(int pivot = 1; pivot <index; pivot++) {
 					fwd = fwd.getNext();
 				}
-				
+
 				DoublyNode<T> delNode = fwd.getNext();
 				fwd.setNext(delNode.getNext());
 				delNode.getNext().setPrev(fwd);				
@@ -132,19 +138,46 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 				for(int pivot = this.size-1; pivot > index; pivot--) {
 					bwd = bwd.getPrev();					
 				}
-				
+
 				DoublyNode<T> delNode = bwd.getPrev();
 				bwd.setPrev(delNode.getPrev());
 				delNode.getPrev().setNext(bwd);
 			}
 		}
-		
+
 		this.size -= 1;
 	}
 
 	public void removeData(T key) {
 
+		if(isEmpty()) { return; } 
 
+		DoublyNode<T> fwd = this.head;
+
+		if(this.head.getData().equals(key)) {
+			removeAtBeginning();
+			return;
+		} else if(this.tail.getData().equals(key)) {
+			removeAtEnd();
+			return;
+		} else {
+
+			while(fwd != null && !fwd.getData().equals(key) ) {
+				fwd = fwd.getNext();
+			}
+
+			if(fwd != null) {
+				fwd.getPrev().setNext(fwd.getNext());
+				fwd.getNext().setPrev(fwd.getPrev());
+
+				//help GC
+				fwd.setData(null);
+				fwd.setNext(null);
+				fwd.setPrev(null);
+
+				this.size -= 1;
+			}
+		}
 	}
 
 	public void printElements() {

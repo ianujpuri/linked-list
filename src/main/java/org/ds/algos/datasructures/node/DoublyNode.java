@@ -41,4 +41,20 @@ public class DoublyNode<T> {
 	}
 
 
+	public boolean equals(Object o) {
+		if(o == null || !(o instanceof DoublyNode)) {
+			return false;
+		}
+		
+		if(o == this) {
+			return true;
+		}
+				
+		DoublyNode node = (DoublyNode) o;
+		if(node.getData() != null && node.getData().equals(data)) {
+			return true;
+		}
+		
+		return false;
+	}
 }

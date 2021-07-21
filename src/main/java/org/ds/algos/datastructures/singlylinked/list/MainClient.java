@@ -51,7 +51,6 @@ public class MainClient {
 		
 		intDoublylist.addAtBeginning(0);	
 		
-		System.out.println("size " + intDoublylist.size());
 		intDoublylist.addAtIndex(8, 2);
 		intDoublylist.printElements();
 		intDoublylist.printElementsReverse();
@@ -62,6 +61,11 @@ public class MainClient {
 		intDoublylist.removeAtIndex(4);
 		intDoublylist.printElements();
 		intDoublylist.printElementsReverse();
-
+		
+		intDoublylist.removeData(2);
+		intDoublylist.printElements();
+		intDoublylist.printElementsReverse();
+		
+		System.out.println("\nsize : " + intDoublylist.size());
 	}
 }
