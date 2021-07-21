@@ -1,5 +1,7 @@
 package org.ds.algos.datastructures.linkedlist;
 
+import org.ds.algos.datastructures.doublylinked.list.DoublyLinkedList;
+
 public class MainClient {
 
 	public static void main(String[] args) {
@@ -32,5 +34,27 @@ public class MainClient {
 		
 		list.removeData("B");
 		list.printElements();
+		
+		
+		// doubly link list
+		DoublyLinkedList<Integer> intDoublylist = new DoublyLinkedList<Integer>();
+		
+		intDoublylist.addAtBeginning(3);
+		intDoublylist.addAtBeginning(2);
+		intDoublylist.addAtBeginning(1);
+		
+		intDoublylist.printElements();
+
+		intDoublylist.addAtEnd(4);
+		intDoublylist.addAtEnd(7);
+		intDoublylist.printElements();
+		
+		intDoublylist.addAtBeginning(0);	
+		
+		System.out.println("size " + intDoublylist.size());
+		intDoublylist.addAtIndex(8, 2);
+		intDoublylist.printElements();
+		intDoublylist.printElementsReverse();
+		
 	}
 }
