@@ -1,4 +1,4 @@
-package org.ds.algos.datastructures.linkedlist;
+package org.ds.algos.datastructures.singlylinked.list;
 
 import org.ds.algos.datasructures.node.LinkInterface;
 import org.ds.algos.datasructures.node.Node;

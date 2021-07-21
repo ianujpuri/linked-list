@@ -1,4 +1,4 @@
-package org.ds.algos.datastructures.linkedlist;
+package org.ds.algos.datastructures.singlylinked.list;
 
 import org.ds.algos.datastructures.doublylinked.list.DoublyLinkedList;
 
@@ -56,5 +56,12 @@ public class MainClient {
 		intDoublylist.printElements();
 		intDoublylist.printElementsReverse();
 		
+		
+		intDoublylist.removeAtBeginning();
+		intDoublylist.removeAtEnd();
+		intDoublylist.removeAtIndex(4);
+		intDoublylist.printElements();
+		intDoublylist.printElementsReverse();
+
 	}
 }

@@ -50,10 +50,8 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 
 		DoublyNode<T> newNode = new DoublyNode<T>(data);
 		
-		DoublyNode<T> bwd = this.tail;		
-		DoublyNode<T> fwd = this.head;
-		
-		if((size - index) >= index) {			
+		if((size - index) >= index) {
+			DoublyNode<T> fwd = this.head;
 			for(int pivot = 1; pivot < index; pivot++) {							
 				fwd = fwd.getNext();
 			}
@@ -64,6 +62,7 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 			
 			fwd.setNext(newNode);
 		} else {
+			DoublyNode<T> bwd = this.tail;		
 			for(int pivot = this.size-1; pivot > index; pivot--) {
 				bwd = bwd.getPrev();
 			}
@@ -82,17 +81,65 @@ public class DoublyLinkedList<T> implements LinkInterface<T> {
 
 	public void removeAtBeginning() {
 
+		if(isEmpty()) { return; }
+		
+		DoublyNode<T> delNode = this.head;
+		
+		this.head = delNode.getNext();
+		this.head.setPrev(null);
+		
+		delNode.setNext(null);
 
+		this.size -= 1;
 	}
 
 	public void removeAtEnd() {
 
+		if(isEmpty()) { return; }
+		
+		DoublyNode<T> delNode = this.tail;
+		
+		this.tail = delNode.getPrev();
+		this.tail.setNext(null);
 
+		delNode.setPrev(null);
+		
+		this.size -= 1;
 	}
 
 	public void removeAtIndex(int index) {
-
-
+		
+		if(isEmpty()) { return; } 
+		
+		if(index == 0) {
+			removeAtBeginning();
+			return;
+		} else if( index >= this.size) {
+			removeAtEnd();
+		} else {
+			
+			if((this.size - index) >= index) {
+				DoublyNode<T> fwd = this.head;
+				for(int pivot = 1; pivot <index; pivot++) {
+					fwd = fwd.getNext();
+				}
+				
+				DoublyNode<T> delNode = fwd.getNext();
+				fwd.setNext(delNode.getNext());
+				delNode.getNext().setPrev(fwd);				
+			}  else {
+				DoublyNode<T> bwd = this.tail;
+				for(int pivot = this.size-1; pivot > index; pivot--) {
+					bwd = bwd.getPrev();					
+				}
+				
+				DoublyNode<T> delNode = bwd.getPrev();
+				bwd.setPrev(delNode.getPrev());
+				delNode.getPrev().setNext(bwd);
+			}
+		}
+		
+		this.size -= 1;
 	}
 
 	public void removeData(T key) {
