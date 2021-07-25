@@ -1,5 +1,6 @@
 package org.ds.algos.datastructures.singlylinked.list;
 
+import org.ds.algos.datastructures.circularlinked.list.CircularLinkedList;
 import org.ds.algos.datastructures.doublylinked.list.DoublyLinkedList;
 
 public class MainClient {
@@ -67,5 +68,22 @@ public class MainClient {
 		intDoublylist.printElementsReverse();
 		
 		System.out.println("\nsize : " + intDoublylist.size());
+		
+		
+		
+		CircularLinkedList<String> listCircular = new CircularLinkedList<String>();
+		listCircular.addAtBeginning("Aishwarya");
+		listCircular.addAtIndex("Rai", 1);
+		listCircular.addAtIndex("Muah", 1);
+		listCircular.addAtEnd("Bachchan");
+		
+		listCircular.printElements();
+		
+		listCircular.removeAtBeginning();
+		listCircular.removeAtEnd();
+		
+		
+		listCircular.printElements();
+		
 	}
 }
