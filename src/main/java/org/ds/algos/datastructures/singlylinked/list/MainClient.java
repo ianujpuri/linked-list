@@ -79,9 +79,12 @@ public class MainClient {
 		
 		listCircular.printElements();
 		
+		listCircular.removeData("Muah");
+		listCircular.removeAtIndex(2);
+		listCircular.printElements();		
+		
 		listCircular.removeAtBeginning();
 		listCircular.removeAtEnd();
-		
 		
 		listCircular.printElements();
 		

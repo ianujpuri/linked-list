@@ -107,17 +107,72 @@ public class CircularLinkedList<T> implements LinkInterface<T> {
 	}
 
 	public void removeAtIndex(int index) {
-		// TODO Auto-generated method stub
-
+		if(isEmpty()) { return; }
+		
+		if(index == 0) {
+			removeAtBeginning();
+			return;
+		} else if(index >= this.size) {
+			removeAtEnd();
+			return;
+		} else {
+			
+			Node<T> temp = this.head;
+			for(int pivot = 1; pivot < index; pivot++) {
+				temp = temp.getNext();
+			}
+			
+			Node<T> delNode = temp.getNext();
+			temp.setNext(delNode.getNext());
+			
+			//help GC
+			delNode.setData(null);
+			delNode.setNext(null);
+			delNode = null;
+			
+			this.size -= 1;
+		}
+		
 	}
 
 	public void removeData(T key) {
-		// TODO Auto-generated method stub
+		
+		if(isEmpty()) { return; }
 
+		if(this.head.getData().equals(key)) {
+			removeAtBeginning();
+			return;
+		} else if (this.tail.getData().equals(key)) {
+			removeAtEnd();
+			return;
+		} else {
+			
+			Node<T> fwd = this.head.getNext();
+			Node<T> prev = this.head;
+			while(!fwd.getData().equals(key) && fwd.getNext() != this.tail) {
+				prev = fwd;
+				fwd = fwd.getNext();				
+			}
+			
+			if(fwd.getData().equals(key)) {
+				prev.setNext(fwd.getNext());
+				
+				//help GC
+				fwd.setData(null);
+				fwd.setNext(null);
+				fwd = null;
+				
+				this.size -= 1;
+			}
+		}		
 	}
 
 	public void printElements() {
 		System.out.println();
+
+		if(isEmpty()) {
+			return;
+		}
 		Node<T> pivot = this.head;
 		for(int index = 0; index < size; index++) {
 			System.out.print(pivot.getData()+" ");
@@ -125,7 +180,7 @@ public class CircularLinkedList<T> implements LinkInterface<T> {
 		}
 	}
 
-	private int size() {
+	public int size() {
 		return this.size;
 	}
 
