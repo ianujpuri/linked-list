@@ -12,7 +12,8 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 	/**
 	 * serial version UID
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 97287412866437955L;
+
 
 	private int size;
 	private int nodeCapacity;
@@ -32,10 +33,21 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 		this.tail = this.head;
 	}
 
-
 	public boolean add(T element) {
 		insertIntoNode(this.tail, this.tail.numElements, element);
 		return true;
+	}
+	
+	@Override
+	public void add(int index, T element) {
+		
+		//search from left to right 		
+		if((this.size - index) >= index) {
+			
+		} else {
+			
+		}
+		
 	}
 
 	@Override
@@ -95,11 +107,18 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 			//the original node or into the new node
 			if(ptr > node.numElements) {
 				node = newNode;
-				ptr -= node.numElements; //
+				ptr -= node.numElements; //to calculate the index where the element has to be inserted.
 			}
 		}
-
 		
+		for(int i = node.numElements; i > ptr ;i--) {
+			node.elements[i] = node.elements[i-1];			
+		}
+		
+		node.elements[ptr] = element;
+		node.numElements++;
+		size++;
+		modCount++;				
 	}
 
 
