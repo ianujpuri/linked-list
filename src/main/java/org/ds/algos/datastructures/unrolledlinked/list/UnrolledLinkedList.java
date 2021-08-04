@@ -41,12 +41,26 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 	@Override
 	public void add(int index, T element) {
 		
+		if(index < 0 || index > this.size) {
+			throw new ArrayIndexOutOfBoundsException(index);
+		}
+		
+		BlockNode<T> node;
+		int ptr;
 		//search from left to right 		
 		if((this.size - index) >= index) {
-			
+			node = this.head;
+			for(ptr = 0; (ptr < (index - node.numElements)); ptr+= node.numElements) {
+				node = node.next;				
+			}						
 		} else {
-			
+			node = this.tail;
+			for(ptr = this.size; (ptr - node.numElements) > index; ptr -= node.numElements) {
+				node = node.prev;
+			}
 		}
+		
+		insertIntoNode(node, ptr - index, element);
 		
 	}
 
