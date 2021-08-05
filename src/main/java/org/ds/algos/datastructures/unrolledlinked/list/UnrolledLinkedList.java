@@ -29,6 +29,7 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 		}
 
 		this.size = 0;
+		this.nodeCapacity = capacity;
 		this.head = new BlockNode<T>(capacity);
 		this.tail = this.head;
 	}
@@ -60,7 +61,26 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 			}
 		}
 		
-		insertIntoNode(node, ptr - index, element);
+		insertIntoNode(node, index - ptr, element);
+		
+	}
+	
+	public void printElements() {
+		if(isEmpty()) {
+			System.out.println("List is Empty");
+			return;
+		}
+		
+		BlockNode<T> fwd = this.head;
+		
+		while(fwd != null) {
+			
+			for(int index = 0; index < fwd.numElements; index++) {
+				System.out.print(fwd.elements[index]+" ");
+			}
+			System.out.println("\n");
+			fwd = fwd.next;
+		}
 		
 	}
 
@@ -128,7 +148,7 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 		for(int i = node.numElements; i > ptr ;i--) {
 			node.elements[i] = node.elements[i-1];			
 		}
-		
+
 		node.elements[ptr] = element;
 		node.numElements++;
 		size++;
