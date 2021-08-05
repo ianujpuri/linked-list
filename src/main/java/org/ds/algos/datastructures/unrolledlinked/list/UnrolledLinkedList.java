@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.ds.algos.datasructures.node.BlockNode;
 
-public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, Serializable {
+public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, Serializable {
 
 	/**
 	 * serial version UID
@@ -17,8 +17,8 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 
 	private int size;
 	private int nodeCapacity;
-	private BlockNode<T> head;
-	private BlockNode<T> tail;
+	private BlockNode<E> head;
+	private BlockNode<E> tail;
 
 	private static final short MIN_CAPACITY = 8;
 
@@ -30,23 +30,23 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 
 		this.size = 0;
 		this.nodeCapacity = capacity;
-		this.head = new BlockNode<T>(capacity);
+		this.head = new BlockNode<E>(capacity);
 		this.tail = this.head;
 	}
 
-	public boolean add(T element) {
+	public boolean add(E element) {
 		insertIntoNode(this.tail, this.tail.numElements, element);
 		return true;
 	}
 	
 	@Override
-	public void add(int index, T element) {
+	public void add(int index, E element) {
 		
 		if(index < 0 || index > this.size) {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 		
-		BlockNode<T> node;
+		BlockNode<E> node;
 		int ptr;
 		//search from left to right 		
 		if((this.size - index) >= index) {
@@ -56,13 +56,50 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 			}						
 		} else {
 			node = this.tail;
-			for(ptr = this.size; (ptr - node.numElements) > index; ptr -= node.numElements) {
+			for(ptr = this.size; (ptr -= node.numElements) > index; ) {
 				node = node.prev;
 			}
 		}
 		
+		System.out.println(" index : " + index + " ptr : " + ptr);
 		insertIntoNode(node, index - ptr, element);
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public E set(int index, E element) {
+		if(index < 0 || index > size) {
+			throw new ArrayIndexOutOfBoundsException(index);
+		}
+		
+		int ptr = 0;
+		BlockNode<E> node = this.head;
+		if((this.size - index >= index)) {
+			//add to ptr the number of elements current node has
+			//such that once the node is identified, correct position can 
+			//be calculated using (index - ptr) equation
+			for( ;(ptr+node.numElements) < index; ptr+=node.numElements) {
+				node = node.next;
+			}
+			
+		} else {
+			node = this.tail;
+			//subtract from ptr the number of elements current node has
+			//such that once the node is identified, correct position can 
+			//be calculated using (index - ptr) equation
+			for(ptr = this.size; (ptr -= node.numElements) > index; ) { 
+				node = node.prev;
+			}
+		}
+		
+		int position = index - ptr;
+		
+		E oldElement = (E) node.elements[position];		
+		node.elements[position] = element;
+		modCount++;
+		
+		return oldElement;
 	}
 	
 	public void printElements() {
@@ -71,7 +108,7 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 			return;
 		}
 		
-		BlockNode<T> fwd = this.head;
+		BlockNode<E> fwd = this.head;
 		
 		while(fwd != null) {
 			
@@ -85,13 +122,13 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<E> iterator() {
 
-		return new ULLIterator<T>();
+		return new ULLIterator<E>();
 	}
 
 	@Override
-	public T get(int index) {
+	public E get(int index) {
 
 		return null;
 	}
@@ -107,12 +144,12 @@ public class UnrolledLinkedList<T> extends AbstractList<T> implements List<T>, S
 		return (this.size == 0 || this.head == null);
 	}
 
-	private void insertIntoNode(BlockNode<T> node, int ptr, T element) {
+	private void insertIntoNode(BlockNode<E> node, int ptr, E element) {
 
 		//if capacity is full for the current tail node
 		//half of the elements have to be shifted to the new node
 		if(node.numElements == this.nodeCapacity) {
-			BlockNode<T> newNode = new BlockNode<T>(this.nodeCapacity);
+			BlockNode<E> newNode = new BlockNode<E>(this.nodeCapacity);
 			
 			int elementsToBeMoved = this.nodeCapacity / 2;
 			int startIndex = this.nodeCapacity - elementsToBeMoved;

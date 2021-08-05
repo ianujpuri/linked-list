@@ -19,6 +19,8 @@ public class MainClient {
 	}
 
 	static void testUnrolledLinkedList() {
+		
+		System.out.println(" UNROLLED LINKED LIST \n\n");
 		UnrolledLinkedList<Integer> list = new UnrolledLinkedList<Integer>(10);
 		
 		list.add(10);
@@ -26,8 +28,11 @@ public class MainClient {
 		list.add(30);
 		list.add(40);
 		
-		list.add(2, 25);
+		list.add(0, 5);
+		list.add(5, 50);
+		list.printElements();
 		
+		list.set(4, 26);		
 		list.printElements();
 	}
 	
