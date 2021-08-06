@@ -24,16 +24,24 @@ public class MainClient {
 		UnrolledLinkedList<Integer> list = new UnrolledLinkedList<Integer>(10);
 		
 		list.add(10);
-		list.add(20);
-		list.add(30);
+		list.add(20); list.add(40);
+		list.add(30); list.add(40);
+		list.add(40); list.add(40);
+		list.add(40); list.add(40);
+		list.add(40); list.add(40);
+		list.add(40); list.add(40);
+		list.add(40); list.add(40);
 		list.add(40);
-		
+		list.add(40);
+		list.add(40);
 		list.add(0, 5);
-		list.add(5, 50);
-		list.printElements();
 		
+		list.add(5, 50);		
 		list.set(4, 26);		
-		list.printElements();
+		System.out.println(list);
+		
+		System.out.println(" index of 20 ?  " + list.indexOf(20));
+		System.out.println(" contains 50 ? " + list.contains(50));
 	}
 	
 	

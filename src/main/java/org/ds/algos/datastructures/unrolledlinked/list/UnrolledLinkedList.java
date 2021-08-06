@@ -5,8 +5,6 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ds.algos.datasructures.node.BlockNode;
-
 public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, Serializable {
 
 	/**
@@ -102,23 +100,74 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 		return oldElement;
 	}
 	
-	public void printElements() {
-		if(isEmpty()) {
-			System.out.println("List is Empty");
-			return;
+	@Override
+	public int indexOf(Object o) {
+		
+		if(isEmpty()) { return -1; }
+		
+		int index = 0;
+		BlockNode<E> node = this.head;
+		
+		if(o == null) {
+			
+			while(node != null) {
+				for(int ptr = 0; ptr < node.numElements; ptr++) {
+					if(node.elements[ptr] == null) {
+						return (index + ptr);
+					}					
+				}
+				
+				index += node.numElements;
+				node = node.next;
+			}
+			
+		} else {
+			while(node != null) {
+				for(int ptr = 0; ptr < node.numElements; ptr++) {
+					if(o.equals(node.elements[ptr])) {
+						return (index + ptr);
+					}
+				}
+				
+				index += node.numElements;
+				node = node.next;
+			}
 		}
 		
+		
+		
+		return -1;
+	}
+	
+	@Override
+	public boolean contains(Object o) {
+		return (indexOf(o) != -1);
+	}
+	
+	@Override
+	public String toString() {
+		if(isEmpty()) {
+			System.out.println("List is Empty");
+			return "{ [ ] }";
+		}
+		
+		StringBuilder str = new StringBuilder("{ ") ;
 		BlockNode<E> fwd = this.head;
 		
 		while(fwd != null) {
-			
+			str.append("[ ");
 			for(int index = 0; index < fwd.numElements; index++) {
-				System.out.print(fwd.elements[index]+" ");
+				str.append(fwd.elements[index]);
+				if(index < fwd.numElements-1) {
+					str.append(", ");
+				}
 			}
-			System.out.println("\n");
+			str.append("]");
 			fwd = fwd.next;
 		}
 		
+		str.append(" }");
+		return str.toString();
 	}
 
 	@Override
@@ -212,17 +261,20 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 	}
 
 	//iterator implementation
-	static class ULLIterator<T> implements Iterator<T> {
+	static class ULLIterator<E> implements Iterator<E> {
 
 		public boolean hasNext() {
 
 			return false;
 		}
 
-		public T next() {
+		public E next() {
 
 			return null;
 		}
-
+		
+		public void remove() {
+			
+		}
 	}
 }
