@@ -1,5 +1,9 @@
 package org.ds.algos.datastructures.singlylinked.list;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.ds.algos.datastructures.circularlinked.list.CircularLinkedList;
 import org.ds.algos.datastructures.doublylinked.list.DoublyLinkedList;
 import org.ds.algos.datastructures.unrolledlinked.list.UnrolledLinkedList;
@@ -40,6 +44,12 @@ public class MainClient {
 		list.set(4, 26);		
 		System.out.println(list);
 		
+		Iterator<Integer> itr = list.iterator();
+		while(itr.hasNext()) {
+			System.out.println("next : " + itr.next());
+		}
+		
+
 		System.out.println(" index of 20 ?  " + list.indexOf(20));
 		System.out.println(" contains 50 ? " + list.contains(50));
 	}

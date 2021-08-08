@@ -2,8 +2,11 @@ package org.ds.algos.datastructures.unrolledlinked.list;
 
 import java.io.Serializable;
 import java.util.AbstractList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import javafx.util.Pair;
 
@@ -117,7 +120,7 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 
 		return false;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public E remove(int index) {
@@ -125,16 +128,16 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 		if(index < 0 || index >  this.size) {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
-		
+
 		int ptr = 0;
 		BlockNode<E> node = this.head;
-		
+
 		if((this.size - index) > index) {
 			while(ptr + node.numElements <= index) {
 				ptr += node.numElements;
 				node = node.next;
 			}
-			
+
 		} else {
 			node = this.tail;
 			ptr = this.size;
@@ -142,11 +145,11 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 				node = node.prev;
 			}
 		}
-		
+
 		E element = (E) node.elements[index-ptr];
 		removeNode(node, index - ptr);
 		return element;
-		
+
 	}
 
 	@Override
@@ -220,7 +223,7 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 	@Override
 	public Iterator<E> iterator() {
 
-		return new ULLIterator<E>();
+		return new ULLIterator<E>(this.head, 0, 0);
 	}
 
 	@Override
@@ -242,47 +245,47 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 
 
 	private void removeNode(BlockNode<E> node, int index) {
-		
+
 		int ptr = index;
 		for(; ptr < node.numElements-1; ptr++) {
 			node.elements[ptr] = node.elements[ptr+1];			
 		}
-		
+
 		node.elements[ptr+1] = null;
 		node.numElements--;
-		
+
 		if (node.next != null && node.next.numElements + node.numElements <= nodeCapacity) {
-            mergeWithNextNode(node);
-        } else if (node.prev != null && node.prev.numElements + node.numElements <= nodeCapacity) {
-            mergeWithNextNode(node.prev);
-        }
-		
+			mergeWithNextNode(node);
+		} else if (node.prev != null && node.prev.numElements + node.numElements <= nodeCapacity) {
+			mergeWithNextNode(node.prev);
+		}
+
 		size--;
 		modCount++;
 	}
-	
-	 /**
-     * This method does merge the specified node with the next node.
-     *
-     * @param node the node which should be merged with the next node
-     */
-    private void mergeWithNextNode(BlockNode<E> node) {
 
-        BlockNode<E> next = node.next;
-        for (int i = 0; i < next.numElements; i++) {
-            node.elements[node.numElements + i] = next.elements[i];
-            next.elements[i] = null;
-        }
-        node.numElements += next.numElements;
-        if (next.next != null) {
-            next.next.prev = node;
-        }
-        node.next = next.next;
-        if (next == this.tail) {
-            this.tail = node;
-        }
+	/**
+	 * This method does merge the specified node with the next node.
+	 *
+	 * @param node the node which should be merged with the next node
+	 */
+	private void mergeWithNextNode(BlockNode<E> node) {
 
-    }
+		BlockNode<E> next = node.next;
+		for (int i = 0; i < next.numElements; i++) {
+			node.elements[node.numElements + i] = next.elements[i];
+			next.elements[i] = null;
+		}
+		node.numElements += next.numElements;
+		if (next.next != null) {
+			next.next.prev = node;
+		}
+		node.next = next.next;
+		if (next == this.tail) {
+			this.tail = node;
+		}
+
+	}
 
 	private void insertIntoNode(BlockNode<E> node, int ptr, E element) {
 
@@ -374,20 +377,98 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 	}
 
 	//iterator implementation
-	static class ULLIterator<E> implements Iterator<E> {
+	private class ULLIterator<T extends E> implements ListIterator<T> {
+
+		private BlockNode<E> currentNode = null;
+
+		//within in the node
+		private int ptr;
+
+		//node to node move tracking
+		private int index;
+		private int expectedModCount = modCount;
+
+		public ULLIterator(BlockNode<E> node, int ptr, int index) {
+			this.currentNode = node;
+			this.ptr = ptr;
+			this.index = index;
+		}
 
 		public boolean hasNext() {
 
-			return false;
+			return (index < (size - 1));
 		}
 
-		public E next() {
+		@SuppressWarnings("unchecked")
+		public T next() {
 
-			return null;
+			if(ptr >= currentNode.numElements) {
+				if(currentNode.next != null) {
+					currentNode = currentNode.next;		
+					ptr = 0;
+				} else {
+					throw new NoSuchElementException();
+				}
+			} 
+
+			index++;
+			T element = (T) currentNode.elements[ptr++];			
+			checkForConcurrentModification();
+			return element;
 		}
 
 		public void remove() {
+			checkForConcurrentModification();
+			removeNode(currentNode, index);
+		}
 
+		public boolean hasPrevious() {
+			return (index > 0);
+		}
+
+		@SuppressWarnings("unchecked")
+		public T previous() {
+
+			if(ptr >= 0) {
+				if(currentNode.prev != null) {
+					ptr = 0;
+					currentNode = currentNode.prev;
+				} else {
+					throw new NoSuchElementException();
+				}
+			}
+			
+			T element = (T) currentNode.elements[ptr--];
+			checkForConcurrentModification();
+			return element;
+		}
+
+		public int nextIndex() {
+
+			return (index + 1);
+		}
+
+		public int previousIndex() {
+	
+			return (index -1);
+		}
+
+		public void set(T e) {
+			checkForConcurrentModification();
+			currentNode.elements[ptr] = e;
+
+		}
+
+		public void add(T e) {
+			checkForConcurrentModification();
+			insertIntoNode(currentNode, ptr+1, e);
+
+		}
+
+		private void checkForConcurrentModification() {
+			 if(expectedModCount != modCount) {
+				 throw new ConcurrentModificationException();
+			 }
 		}
 	}
 }
