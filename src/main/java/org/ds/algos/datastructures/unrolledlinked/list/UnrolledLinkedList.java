@@ -226,10 +226,14 @@ public class UnrolledLinkedList<E> extends AbstractList<E> implements List<E>, S
 		return new ULLIterator<E>(this.head, 0, 0);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public E get(int index) {
-
-		return null;
+		
+		Pair<BlockNode<E>, Integer> nodeAndPtr = getNodeAndPointerToIndex(index);
+		E element = (E) nodeAndPtr.getKey().elements[index-nodeAndPtr.getValue()];
+		
+		return element;
 	}
 
 	@Override
