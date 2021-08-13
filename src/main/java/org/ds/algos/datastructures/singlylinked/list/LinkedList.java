@@ -159,8 +159,6 @@ public class LinkedList<E> implements LinkInterface<E> {
 			counter++;
 		}
 
-
-
 		prev.setNext(temp.getNext());		
 		if(temp.getNext() == null) {
 			this.tail = prev;
@@ -173,7 +171,26 @@ public class LinkedList<E> implements LinkInterface<E> {
 		this.size--;
 	}
 
-
+	public E findNthNodeFromTail(int indexFromTail) {
+		Node<E> node = this.head;
+		Node<E> fast = this.head;
+		
+		if(indexFromTail < 0 || indexFromTail >= size()) {
+			throw new ArrayIndexOutOfBoundsException(indexFromTail);
+		}
+		
+		int index = 0;
+		for(; index < indexFromTail; index++) {
+			fast = fast.getNext();
+		}
+		
+		for(; fast != null; fast = fast.getNext()) {
+			node = node.getNext();
+		}
+		
+		return node.getData();
+	}
+	
 	public int size() {
 		return this.size;
 	}

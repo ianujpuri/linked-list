@@ -12,13 +12,13 @@ public class MainClient {
 
 	public static void main(String[] args) {
 
-//		testSinglyLinkedList();
+		testSinglyLinkedList();
 //		
 //		testDoublyLinkedList();
 //		
 //		testCircularLinkedList();
 		
-		testUnrolledLinkedList();
+//		testUnrolledLinkedList();
 
 	}
 
@@ -57,35 +57,18 @@ public class MainClient {
 	
 	static void testSinglyLinkedList() {
 
-		LinkedList<String> list = new LinkedList<String>();
+		LinkedList<Integer> list = new LinkedList<Integer>();
 
-		list.addAtBeginning("A");
-		System.out.println(" size after A: " + list.size());
-		list.addAtEnd("C");
-		System.out.println(" size after C: " + list.size());
-		list.addAtIndex("B", 1);
-		System.out.println(" size after B: " + list.size());
+		list.addAtBeginning(1);
+		list.addAtEnd(2);
+		list.addAtEnd(3);
+		list.addAtEnd(4);
+		list.addAtEnd(5);
+		list.addAtEnd(6);
 
-		list.printElements(); // A B C
-
-		//		list.removeAtBeginning();
-		//		list.printElements(); //B C
-		//		
-		//		list.removeAtIndex(0);
-		//		list.printElements();
-		//		
-		//		
-		//		list.removeAtIndex(0);
-		//		list.printElements();
-
-		list.removeData("A");
-		list.printElements();
-
-		list.removeData("C");
-		list.printElements();
-
-		list.removeData("B");
-		list.printElements();
+		list.printElements(); //
+		System.out.println("nth node from tail : " + list.findNthNodeFromTail(2));
+	
 	}
 
 	static void testDoublyLinkedList() {
